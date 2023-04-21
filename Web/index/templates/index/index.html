@@ -1,18 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Test</title>
     <style>
+        @font-face {
+          font-family: IranSans;
+          src: url({% static 'IranSans.ttf' %});
+        }
         html, body {
           height: 100%;
           width: 100%;
           margin: 0;
           padding: 0;
         }
+        body{
+            background-image: linear-gradient(to top right, rgba(255, 0, 0, 0.4), rgba(38, 0, 255, 0.4));
+            text-align: center;
+            font-family: 'IranSans', serif;
+        }
+        img{
+            display: block;
+            margin: 0 auto;
+            width: 40%;
+        }
+        h2{
+            color: #19376D;
+            margin-top: 0;
+            font-size: 4rem;
+        }
     </style>
 </head>
-<body>
+<body >
+
+    <img src="{% static 'Gas.png' %}" alt="">
+    <h2>اپلیکیشن گازبان</h2>
 
 </body>
 </html>
