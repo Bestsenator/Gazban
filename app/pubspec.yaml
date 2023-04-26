@@ -31,6 +31,12 @@ dependencies:
   flutter_easyloading: ^3.0.5
   top_snackbar_flutter: ^3.0.0+1
   shimmer: ^2.0.0
+  animated_notch_bottom_bar: ^0.0.6
+  flutter_neumorphic: ^3.2.0
+  top_modal_sheet: ^2.0.1
+  custom_sliding_segmented_control: ^1.7.4
+  persian_datetime_picker: ^2.5.0
+
 
   
 
@@ -64,6 +70,6 @@ flutter:
 
 
   fonts:
-   - family: Vazir
+   - family: IRANSans
      fonts:
-       - asset: assets/fonts/Vazir.ttf
+       - asset: assets/fonts/IRANSans.ttf

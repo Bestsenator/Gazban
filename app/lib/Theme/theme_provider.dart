@@ -42,7 +42,7 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
-    fontFamily: 'Vazir',
+    fontFamily: 'IRANSans',
     listTileTheme: const ListTileThemeData(
         iconColor: Colors.white, textColor: Colors.white),
     textTheme: const TextTheme(
@@ -102,7 +102,7 @@ class MyThemes {
   );
 
   static final lightTheme = ThemeData(
-    fontFamily: 'Vazir',
+    fontFamily: 'IRANSans',
     listTileTheme: const ListTileThemeData(iconColor: Colors.black),
     textTheme: const TextTheme(
       titleLarge: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gazban/Screens/Profile_Page/info_user.dart';
 import 'package:provider/provider.dart';
+import 'Screens/Navigation/navigation.dart';
 import 'Screens/Side_Pages/splash.dart';
 import 'Screens/Home_Pages/home.dart';
 import 'Screens/Login_Pages/login.dart';
@@ -53,11 +55,13 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             Locale('fa', 'IR'),
           ],
           locale: const Locale('fa', 'IR'),
-          initialRoute: "/home",
+          initialRoute: "/navigation",
           routes: {
             "/splash": (context) => const SplashScreen(),
             "/login": (context) => const LoginScreen(),
             "/home": (context) => const HomeScreen(),
+            "/navigation": (context) => const Navigation(),
+            "/infoUser": (context) => const InfoUserScreen(),
           },
         );
       },
