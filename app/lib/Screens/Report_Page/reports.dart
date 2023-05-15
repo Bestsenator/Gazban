@@ -55,7 +55,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     print(picked.toString());
                   },
                   icon: Icon(
-                    Icons.filter_alt_outlined,
+                    CupertinoIcons.slider_horizontal_3,
                     size: 35,
                   ),
                 ),
@@ -75,12 +75,12 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
                 children: [
                   ToggleElement(
-                    foreground: Center(child: Text('گزارش ساعتی')),
-                    background: Center(child: Text('گزارش ساعتی')),
+                    foreground: Center(child: Text('مرخصی ساعتی')),
+                    background: Center(child: Text('مرخصی ساعتی')),
                   ),
                   ToggleElement(
-                    foreground: Center(child: Text('گزارش روزانه')),
-                    background: Center(child: Text('گزارش روزانه')),
+                    foreground: Center(child: Text('مرخصی روزانه')),
+                    background: Center(child: Text('مرخصی روزانه')),
                   ),
                 ],
                 onChanged: (value) {
@@ -95,7 +95,7 @@ class _ReportScreenState extends State<ReportScreen> {
               height: MediaQuery.of(context).size.height,
               child: ListView.builder(
                 padding: EdgeInsets.only(bottom: 290),
-                itemCount: 100 + 1,
+                itemCount: 10 + 1,
                 itemBuilder: (context, index) {
                   return ExpandablePanel(
                     theme: const ExpandableThemeData(
@@ -103,15 +103,18 @@ class _ReportScreenState extends State<ReportScreen> {
                       iconSize: 30,
                       iconPadding: EdgeInsets.fromLTRB(20, 10, 0, 10),
                     ),
-                    header: Row(
-                      children: [
-                        Text('data'),
-                      ],
+                    header: ListTile(
+                      leading: Icon(Icons.ac_unit_rounded),
+                      title: reportType
+                          ? Text('مرخصی ${index + 1} روزه')
+                          : Text('مرخصی ${index + 2} ساعته'),
+                      subtitle:
+                          Text('12:4${index + 1} - 1402/02/0${index + 1}'),
                     ),
                     collapsed: Row(),
                     expanded: Row(
                       children: [
-                        Text('njnscjdbdc'),
+                        Text('اطلاعاتی موجود نیست !'),
                       ],
                     ),
                   );

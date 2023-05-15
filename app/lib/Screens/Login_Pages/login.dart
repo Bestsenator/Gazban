@@ -129,169 +129,186 @@ class LoginScreenState extends State<LoginScreen> {
 
     return WillPopScope(
       onWillPop: exitApp,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 30, 10, 0),
-                  child: SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Stack(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/icon/icon.png'),
-                        ),
-                        Shimmer.fromColors(
-                          baseColor: Colors.transparent,
-                          highlightColor:
-                              const Color.fromARGB(255, 255, 255, 255),
-                          period: const Duration(milliseconds: 5000),
-                          child: const Padding(
-                            padding: EdgeInsets.only(bottom: 2),
-                            child: Image(
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color.fromARGB(80, 38, 0, 255),
+                  Color.fromARGB(80, 255, 0, 0),
+                ],
+              ),
+            ),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 30, 10, 0),
+                      child: SizedBox(
+                        height: 200,
+                        width: 200,
+                        child: Stack(
+                          children: [
+                            Image(
                               image: AssetImage('assets/icon/icon.png'),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: const Text(
-                  'ورود به حساب',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
-                child: TextField(
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp('[0-9۰۱۲۳۴۵۶۷۸۹]')),
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      return newValue.copyWith(
-                          text: convertToFa(newValue.text));
-                    }),
-                  ],
-                  maxLength: 10,
-                  style: const TextStyle(fontSize: 18, letterSpacing: 1.5),
-                  textDirection: TextDirection.ltr,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    counterText: '',
-                    label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(CupertinoIcons.person_fill,
-                              color: Color.fromARGB(255, 19, 8, 118)),
-                          Text(
-                            ' نام کاربری ',
-                            style: TextStyle(letterSpacing: 0),
-                          ),
-                        ]),
-                    border: const OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    value = convertToEn(value);
-                    setState(
-                      () {
-                        username = value;
-                      },
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
-                child: TextField(
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp('[0-9۰۱۲۳۴۵۶۷۸۹]')),
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      return newValue.copyWith(
-                          text: convertToFa(newValue.text));
-                    }),
-                  ],
-                  maxLength: 10,
-                  style: const TextStyle(fontSize: 18, letterSpacing: 1.5),
-                  textDirection: TextDirection.ltr,
-                  keyboardType: TextInputType.phone,
-                  minLines: 1,
-                  maxLines: 1,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    hintTextDirection: TextDirection.ltr,
-                    counterText: '',
-                    label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/images/key.png',
-                              height: 20, width: 20, color: Colors.red),
-                          const Text(
-                            ' رمز عبور ',
-                            style: TextStyle(letterSpacing: 0),
-                          ),
-                        ]),
-                    border: const OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    value = convertToEn(value);
-                    setState(
-                      () {
-                        password = value;
-                      },
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
-                child: ElevatedButton(
-                  autofocus: true,
-                  onPressed: password!.length == 10 && username != null
-                      ? () {
-                          // chekState();
-                        }
-                      : null,
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                        child: Text(
-                          'ورود',
-                          style: TextStyle(fontSize: 20),
+                            Shimmer.fromColors(
+                              baseColor: Colors.transparent,
+                              highlightColor:
+                                  const Color.fromARGB(255, 255, 255, 255),
+                              period: const Duration(milliseconds: 5000),
+                              child: const Padding(
+                                padding: EdgeInsets.only(bottom: 2),
+                                child: Image(
+                                  image: AssetImage('assets/icon/icon.png'),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    child: const Text(
+                      'ورود به حساب',
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
+                    child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp('[0-9۰۱۲۳۴۵۶۷۸۹]')),
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          return newValue.copyWith(
+                              text: convertToFa(newValue.text));
+                        }),
+                      ],
+                      maxLength: 10,
+                      style: const TextStyle(fontSize: 18, letterSpacing: 1.5),
+                      textDirection: TextDirection.ltr,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(CupertinoIcons.person_fill,
+                                  color: Color.fromARGB(255, 19, 8, 118)),
+                              Text(
+                                ' نام کاربری ',
+                                style: TextStyle(letterSpacing: 0),
+                              ),
+                            ]),
+                        border: const OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        value = convertToEn(value);
+                        setState(
+                          () {
+                            username = value;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
+                    child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp('[0-9۰۱۲۳۴۵۶۷۸۹]')),
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          return newValue.copyWith(
+                              text: convertToFa(newValue.text));
+                        }),
+                      ],
+                      maxLength: 10,
+                      style: const TextStyle(fontSize: 18, letterSpacing: 1.5),
+                      textDirection: TextDirection.ltr,
+                      keyboardType: TextInputType.phone,
+                      minLines: 1,
+                      maxLines: 1,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        hintTextDirection: TextDirection.ltr,
+                        counterText: '',
+                        label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/images/key.png',
+                                  height: 20, width: 20, color: Colors.red),
+                              const Text(
+                                ' رمز عبور ',
+                                style: TextStyle(letterSpacing: 0),
+                              ),
+                            ]),
+                        border: const OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        value = convertToEn(value);
+                        setState(
+                          () {
+                            password = value;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: ElevatedButton(
+                      autofocus: true,
+                      onPressed: password!.length == 10 && username != null
+                          ? () {
+                              // chekState();
+                            }
+                          : null,
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30))),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 20),
+                            child: Text(
+                              'ورود',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                ],
               ),
-              SizedBox(height: 40),
-            ],
+            ),
           ),
         ),
       ),

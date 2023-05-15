@@ -4,7 +4,7 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../Home_Pages/home.dart';
+import '../Home_Pages/home5.dart';
 import '../Profile_Page/profile.dart';
 import '../Report_Page/reports.dart';
 
@@ -22,7 +22,7 @@ class _NavigationState extends State<Navigation> {
     HomeScreen(),
     ProfileScreen(),
   ];
-  PageController pageController = PageController(initialPage: 0);
+  PageController pageController = PageController(initialPage: 1);
 
   Future<bool> exitApp() async {
     return (await showDialog(
@@ -103,7 +103,7 @@ class _NavigationState extends State<Navigation> {
               pageController.animateToPage(
                 index,
                 duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInCirc,
+                curve: Curves.decelerate,
               );
             },
           ),

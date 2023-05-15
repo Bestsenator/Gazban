@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(height: 4),
-                        Text('رئیس اداره شهر انابد'),
+                        Text('گازبان کشمر'),
                       ],
                     )
                   ],
@@ -81,11 +82,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text('درخواست های جاری'),
                       Divider(),
-                      ListTile(
-                        leading: Icon(Icons.pending_actions_rounded),
-                        title: Text('مرخصی یک روزه'),
-                        subtitle: Text('معین : علی نجف زاده'),
-                      ),
+                      ExpandablePanel(
+                          theme: const ExpandableThemeData(
+                            iconColor: Colors.grey,
+                            iconSize: 30,
+                            iconPadding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                          ),
+                          header: ListTile(
+                            leading: Icon(Icons.pending_actions_rounded),
+                            title: Text('مرخصی یک روزه'),
+                            subtitle: Text('معین : علی نجف زاده'),
+                          ),
+                          collapsed: Row(),
+                          expanded: Row()),
                       Divider(),
                     ],
                   ),
@@ -129,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: EdgeInsets.all(20),
                               color: Colors.red,
                               child: Center(
-                                child: Text('تست2'),
+                                child: Text('درخواست مرخصی'),
                               ),
                             ),
                           ),
