@@ -1,5 +1,5 @@
 import json
-
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from funcs import auth
@@ -294,6 +294,298 @@ def acceptRequest(request):
 
 
 @api_view(['POST'])
+def getListCharacter(request):
+    print('getListCharacter Called...')
+    resAuth = auth.authAPI(request)
+    if type(resAuth) == dict:
+        return Response(resAuth)
+    listInput = ['AreaCode', 'PeCode', 'FromWho']
+    resCheckInp = auth.checkInput(request, listInput)
+    if resCheckInp != 1:
+        return Response(resCheckInp)
+    areaCode = request.data.get('AreaCode')
+    peCode = request.data.get('PeCode')
+    fromWho = request.data.get('FromWho')  # headCity or headArea or headRelief
+    if fromWho == 'HeadCity' or fromWho == 'HeadRelief':
+        headCityInfo = HeadCity.objects.filter(PeCode=peCode).first()
+        headReliefInfo = HeadRelief.objects.filter(PeCode=peCode).first()
+        if headCityInfo or headReliefInfo:
+            context = {}
+            gasEmployeeInfo = GasEmployee.objects.filter(AreaCode=areaCode)
+            if gasEmployeeInfo:
+                context['GasEmployee'] = ListGasEmployeeSer(gasEmployeeInfo, many=True).data
+            else:
+                context['GasEmployee'] = []
+            representativeInfo = Representative.objects.filter(AreaCode=areaCode)
+            if representativeInfo:
+                context['Representative'] = ListRepresentativeSer(representativeInfo, many=True).data
+            else:
+                context['Representative'] = []
+            return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'Wrong PeCode'
+            }
+            return Response(context)
+    elif fromWho == 'HeadArea':
+        headAreaInfo = HeadArea.objects.filter(PeCode=peCode).first()
+        if headAreaInfo:
+            context = {}
+            gasEmployeeInfo = GasEmployee.objects.filter(AreaCode=areaCode)
+            if gasEmployeeInfo:
+                context['GasEmployee'] = ListGasEmployeeSer(gasEmployeeInfo, many=True).data
+            else:
+                context['GasEmployee'] = []
+            representativeInfo = Representative.objects.filter(AreaCode=areaCode)
+            if representativeInfo:
+                context['Representative'] = ListRepresentativeSer(representativeInfo, many=True).data
+            else:
+                context['Representative'] = []
+            headCityInfo = HeadCity.objects.filter(AreaCode=areaCode)
+            if headCityInfo:
+                context['HeadCity'] = ListHeadCitySer(headCityInfo, many=True).data
+            else:
+                context['HeadCity'] = []
+            headReliefInfo = HeadRelief.objects.filter(AreaCode=areaCode)
+            if headReliefInfo:
+                context['HeadRelief'] = ListHeadReliefSer(headReliefInfo, many=True).data
+            else:
+                context['HeadRelief'] = []
+            return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'Wrong PeCode'
+            }
+            return Response(context)
+    else:
+        context = {
+            'Status': 400,
+            'Message': 'Wrong FromWho'
+        }
+        return Response(context)
+
+
+@api_view(['POST'])
+def deleteCharacter(request):
+    print('deleteCharacter Called...')
+    resAuth = auth.authAPI(request)
+    if type(resAuth) == dict:
+        return Response(resAuth)
+    listInput = ['PeCodeCharacter', 'PeCode', 'Character']
+    resCheckInp = auth.checkInput(request, listInput)
+    if resCheckInp != 1:
+        return Response(resCheckInp)
+    peCode = request.data.get('PeCode')
+    characterPeCode = request.data.get('CharacterPeCode')
+    character = request.data.get('Character')   # GasEmployee / Representative / HeadCity / HeadRelief / Rescuer
+    headAreaInfo = HeadArea.objects.filter(PeCode=peCode).first()
+    if headAreaInfo:
+        if character == 'GasEmployee':
+            gasEmployeeInfo = GasEmployee.objects.filter(PeCode=characterPeCode).first()
+            if gasEmployeeInfo:
+                context = {
+                    'Status': 200,
+                    'Info': GasEmployeeSer(gasEmployeeInfo).data
+                }
+                gasEmployeeInfo.delete()
+                return Response(context)
+            else:
+                context = {
+                    'Status': 400,
+                    'Message': 'Character or CharacterPeCode is Wrong'
+                }
+                return Response(context)
+        elif character == 'HeadCity':
+            headCityInfo = HeadCity.objects.filter(PeCode=characterPeCode).first()
+            if headCityInfo:
+                context = {
+                    'Status': 200,
+                    'Info': ListHeadCitySer(headCityInfo).data
+                }
+                headCityInfo.delete()
+                return Response(context)
+            else:
+                context = {
+                    'Status': 400,
+                    'Message': 'Character or CharacterPeCode is Wrong'
+                }
+                return Response(context)
+        elif character == 'HeadRelief':
+            headReliefInfo = HeadRelief.objects.filter(PeCode=characterPeCode).first()
+            if headReliefInfo:
+                context = {
+                    'Status': 200,
+                    'Info': ListHeadReliefSer(headReliefInfo).data
+                }
+                return Response(context)
+            else:
+                context = {
+                    'Status': 400,
+                    'Message': 'Character or CharacterPeCode is Wrong'
+                }
+                return Response(context)
+        elif character == 'Rescuer':
+            rescuerInfo = Rescuer.objects.filter(PeCode=characterPeCode).first()
+            if rescuerInfo:
+                context = {
+                    'Status': 200,
+                    'Info': rescuerInfo
+                }
+                return Response(context)
+            else:
+                context = {
+                    'Status': 400,
+                    'Message': 'Character or CharacterPeCode is Wrong'
+                }
+                return Response(context)
+        elif character == 'Representative':
+            representativeInfo = Representative.objects.filter(PeCode=peCode).first()
+            if representativeInfo:
+                context = {
+                    'Status': 200,
+                    'Info': representativeInfo
+                }
+                return Response(context)
+            else:
+                context = {
+                    'Status': 400,
+                    'Message': 'Character or CharacterPeCode is Wrong'
+                }
+                return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'PeCode is Wrong'
+            }
+            return Response(context)
+
+
+@api_view(['POST'])
+def editCharacterInfo(request):
+    print('deleteCharacter Called...')
+    resAuth = auth.authAPI(request)
+    if type(resAuth) == dict:
+        return Response(resAuth)
+    listInput = ['PeCodeCharacter', 'PeCode', 'Character', 'Name', 'Family', 'NationalCode', 'ListOfPhone']
+    resCheckInp = auth.checkInput(request, listInput)
+    if resCheckInp != 1:
+        return Response(resCheckInp)
+    character = request.data.get('Character')
+    peCode = request.data.get('PeCode')
+    characterPeCode = request.data.get('CharacterPeCode')
+    name = request.data.get('Name')
+    family = request.data.get('Family')
+    nationalCode = request.data.get('NationalCode')
+    listOfPhone = request.data.get('ListOfPhone')
+    headAreaInfo = HeadArea.objects.filter(PeCode=peCode).first()
+    if not headAreaInfo:
+        context = {
+            'Status': 400,
+            'Message': 'PeCode is Wrong'
+        }
+        return Response(context)
+    if character == 'GasEmployee':
+        listInput = ['ListOfVillages', 'ListOfMGasEmployee']
+        resCheckInp = auth.checkInput(request, listInput)
+        if resCheckInp != 1:
+            return Response(resCheckInp)
+        listOfVillages = request.data.get('ListOfVillages')
+        listOfMGasEmp = request.data.get('ListOfMGasEmployee')
+        gasEmployeeInfo = GasEmployee.objects.filter(PeCode=characterPeCode).first()
+        if gasEmployeeInfo:
+            gasEmployeeInfo.Name = name
+            gasEmployeeInfo.Family = family
+            gasEmployeeInfo.NationalCode = nationalCode
+            gasEmployeeInfo.ListOfPhone = listOfPhone
+            gasEmployeeInfo.ListOfVillages = listOfVillages
+            gasEmployeeInfo.ListOfMGasEmployee = listOfMGasEmp
+            gasEmployeeInfo.save()
+            context = {
+                'Status': 200
+            }
+            return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'CharacterPeCode or Character is Wrong'
+            }
+            return Response(context)
+    elif character == 'Representative':
+        listInput = ['AgreementNumber']
+        resCheckInp = auth.checkInput(request, listInput)
+        if resCheckInp != 1:
+            return Response(resCheckInp)
+        agreementNumber = request.data.get('AgreementNumber')
+        representativeInfo = Representative.objects.filter(PeCode=characterPeCode).first()
+        if representativeInfo:
+            representativeInfo.Name = name
+            representativeInfo.Family = family
+            representativeInfo.NationalCode = nationalCode
+            representativeInfo.ListOfPhone = listOfPhone
+            representativeInfo.AgreementNumber = agreementNumber
+            representativeInfo.save()
+            context = {
+                'Status': 200
+            }
+            return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'CharacterPeCode or Character is Wrong'
+            }
+            return Response(context)
+    elif character == 'HeadCity':
+        listInput = ['CityCode']
+        resCheckInp = auth.checkInput(request, listInput)
+        if resCheckInp != 1:
+            return Response(resCheckInp)
+        cityCode = request.data.get('CityCode')
+        headCityInfo = HeadCity.objects.filter(PeCode=characterPeCode).first()
+        if headCityInfo:
+            headCityInfo.Name = name
+            headCityInfo.Family = family
+            headCityInfo.NationalCode = nationalCode
+            headCityInfo.ListOfPhone = listOfPhone
+            headCityInfo.CityCode = cityCode
+            headCityInfo.save()
+            context = {
+                'Status': 200
+            }
+            return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'CharacterPeCode or Character is Wrong'
+            }
+            return Response(context)
+    elif character == 'HeadRelief':
+        listInput = ['ListOfCity']
+        resCheckInp = auth.checkInput(request, listInput)
+        if resCheckInp != 1:
+            return Response(resCheckInp)
+        listOfCity = request.data.get('ListOfCity')
+        headReliefInfo = HeadRelief.objects.filter(PeCode=characterPeCode).first()
+        if headReliefInfo:
+            headReliefInfo.Name = name
+            headReliefInfo.Family = family
+            headReliefInfo.NationalCode = nationalCode
+            headReliefInfo.ListOfPhone = listOfPhone
+            headReliefInfo.ListOfCity = listOfCity
+            headReliefInfo.save()
+            context = {
+                'Status': 200
+            }
+            return Response(context)
+        else:
+            context = {
+                'Status': 400,
+                'Message': 'CharacterPeCode or Character is Wrong'
+            }
+            return Response(context)
+
+@api_view(['POST'])
 def getMList(request):
     print('getMList Called...')
     resAuth = auth.authAPI(request)
@@ -346,14 +638,14 @@ def getReportRequest(request):
     toD = request.data.get('To')
     typeRequest = request.data.get('')
     if fromD == '0' and toD == '0':
-        fromDate = jdatetime.datetime.today().date()
-        toDate = jdatetime.datetime.today().date()
+        fromDate = datetime.datetime.today().date()
+        toDate = datetime.datetime.today().date()
     else:
         try:
             fromD = fromD.split('/')
-            fromDate = jdatetime.datetime(year=int(fromD[0]), month=int(fromD[1]), day=int(fromD[2])).date()
+            fromDate = datetime.datetime(year=int(fromD[0]), month=int(fromD[1]), day=int(fromD[2])).date()
             toD = toD.split('/')
-            toDate = jdatetime.datetime(year=int(toD[0]), month=int(toD[1]), day=int(toD[2])).date()
+            toDate = datetime.datetime(year=int(toD[0]), month=int(toD[1]), day=int(toD[2])).date()
         except Exception as e:
             print(e.__class__.__name__)
             context = {
