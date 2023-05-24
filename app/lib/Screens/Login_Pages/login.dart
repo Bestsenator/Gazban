@@ -131,6 +131,7 @@ class LoginScreenState extends State<LoginScreen> {
       onWillPop: exitApp,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -145,7 +146,7 @@ class LoginScreenState extends State<LoginScreen> {
               ),
             ),
             child: SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -154,27 +155,28 @@ class LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       margin: EdgeInsets.fromLTRB(10, 30, 10, 0),
                       child: SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: Stack(
-                            children: [
-                              Image(
-                                image: AssetImage('assets/icon/icon.png'),
-                              ),
-                              Shimmer.fromColors(
-                                baseColor: Colors.transparent,
-                                highlightColor:
-                                    const Color.fromARGB(255, 255, 255, 255),
-                                period: const Duration(milliseconds: 5000),
-                                child: const Padding(
-                                  padding: EdgeInsets.only(bottom: 2),
-                                  child: Image(
-                                    image: AssetImage('assets/icon/icon.png'),
-                                  ),
+                        height: 200,
+                        width: 200,
+                        child: Stack(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/icon/icon.png'),
+                            ),
+                            Shimmer.fromColors(
+                              baseColor: Colors.transparent,
+                              highlightColor:
+                                  const Color.fromARGB(255, 255, 255, 255),
+                              period: const Duration(milliseconds: 5000),
+                              child: const Padding(
+                                padding: EdgeInsets.only(bottom: 2),
+                                child: Image(
+                                  image: AssetImage('assets/icon/icon.png'),
                                 ),
                               ),
-                            ],
-                          )),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   Container(
