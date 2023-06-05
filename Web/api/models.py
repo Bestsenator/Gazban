@@ -2,8 +2,11 @@ import random
 import secrets
 
 import jdatetime
+import pytz
+from django.contrib.postgres.fields import ArrayField
+import datetime
 from django.db import models
-
+from django_jalali.db import models as jmodels
 # Create your models here.
 
 
@@ -31,16 +34,16 @@ class GasEmployee(models.Model):  # گازبان
     Name = models.CharField(max_length=150)
     Family = models.CharField(max_length=150)
     NationalCode = models.CharField(max_length=15)
-    ListOfPhone = models.JSONField()
+    ListOfPhone = ArrayField(models.CharField(max_length=12), size=10, default=list)
     Username = models.CharField(max_length=20, default='')
     Password = models.CharField(max_length=32, default='')
     AreaCode = models.IntegerField()  # کد منطفه
     CityCode = models.IntegerField()  # کد شهر
     RepresentativeCode = models.IntegerField()  # کد نماینده
-    ListOfVillage = models.JSONField()  # لیستی از روستاها
-    ListOfMGasEmployee = models.JSONField()  # لیستی از معین گازبان
+    ListOfVillages = ArrayField(models.IntegerField(default=0), size=30, default=list)  # لیستی از روستاها
+    ListOfMGasEmployee = ArrayField(models.IntegerField(default=0), size=10, default=list)  # لیستی از معین گازبان
     Session = models.CharField(default=secrets.token_urlsafe(100), max_length=150)
-    RegisterTime = models.DateTimeField(default=getDateTime)
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime)
 
 
 class Representative(models.Model):  # نماینده
@@ -48,13 +51,13 @@ class Representative(models.Model):  # نماینده
     Name = models.CharField(max_length=150)
     Family = models.CharField(max_length=150)
     NationalCode = models.CharField(max_length=15)
-    Phone = models.CharField(max_length=15)
+    ListOfPhone = ArrayField(models.CharField(max_length=12), size=10, default=list)
     Username = models.CharField(max_length=20, default='')
     Password = models.CharField(max_length=32, default='')
     AreaCode = models.IntegerField()
     AgreementNumber = models.IntegerField()  # شماره پیمان
     Session = models.CharField(default=secrets.token_urlsafe(100), max_length=150)
-    RegisterTime = models.DateTimeField(default=getDateTime())
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime())
 
 
 class Rescuer(models.Model):  # امدادگر
@@ -64,7 +67,7 @@ class Rescuer(models.Model):  # امدادگر
     Password = models.CharField(max_length=32, default='')
     AreaCode = models.IntegerField()
     Session = models.CharField(default=secrets.token_urlsafe(100), max_length=150)
-    RegisterTime = models.DateTimeField(default=getDateTime())
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime())
 
 
 class HeadCity(models.Model):  # رئیس شهر
@@ -72,13 +75,13 @@ class HeadCity(models.Model):  # رئیس شهر
     Name = models.CharField(max_length=150)
     Family = models.CharField(max_length=150)
     NationalCode = models.CharField(max_length=15)
-    Phone = models.CharField(max_length=15)
+    ListOfPhone = ArrayField(models.CharField(max_length=12), size=10, default=list)
     Username = models.CharField(max_length=20, default='')
     Password = models.CharField(max_length=32, default='')
     CityCode = models.IntegerField()  # کد شهر
     AreaCode = models.IntegerField()
     Session = models.CharField(default=secrets.token_urlsafe(100), max_length=150)
-    RegisterTime = models.DateTimeField(default=getDateTime())
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime())
 
 
 class HeadRelief(models.Model):  # رئیس امداد
@@ -86,13 +89,13 @@ class HeadRelief(models.Model):  # رئیس امداد
     Name = models.CharField(max_length=150)
     Family = models.CharField(max_length=150)
     NationalCode = models.CharField(max_length=15)
-    ListOfPhone = models.JSONField()
+    ListOfPhone = ArrayField(models.CharField(max_length=12), size=10, default=list)
     Username = models.CharField(max_length=20, default='')
     Password = models.CharField(max_length=32, default='')
-    CityCode = models.IntegerField()  # کد شهر
+    ListOfCity = ArrayField(models.IntegerField(default=0), size=20, default=list)
     AreaCode = models.IntegerField()
     Session = models.CharField(default=secrets.token_urlsafe(100), max_length=150)
-    RegisterTime = models.DateTimeField(default=getDateTime())
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime())
 
 
 class HeadArea(models.Model):
@@ -100,13 +103,13 @@ class HeadArea(models.Model):
     Name = models.CharField(max_length=150)
     Family = models.CharField(max_length=150)
     NationalCode = models.CharField(max_length=15)
-    Phone = models.CharField(max_length=15)
+    ListOfPhone = ArrayField(models.CharField(max_length=12), size=10, default=list)
     Username = models.CharField(max_length=20, default='')
     Password = models.CharField(max_length=32, default='')
     CityCode = models.IntegerField()  # کد شهر
     AreaCode = models.IntegerField()
     Session = models.CharField(default=secrets.token_urlsafe(100), max_length=150)
-    RegisterTime = models.DateTimeField(default=getDateTime())
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime())
 
 
 class DailyRequest(models.Model):
@@ -123,8 +126,8 @@ class DailyRequest(models.Model):
     FConf = models.BooleanField(default=False)  # First Confirmation --> Moeen
     SConf = models.BooleanField(blank=True, null=True, default=None)  # Second Confirmation --> Representative
     TConf = models.BooleanField(blank=True, null=True, default=None)  # Third Confirmation --> HeadCity or HeadRelief
-    ConfirmTime = models.DateTimeField(blank=True, null=True)
-    RegisterTime = models.DateTimeField(default=getDateTime)
+    ConfirmTime = jmodels.jDateTimeField(blank=True, null=True)
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime)
     Status = models.CharField(max_length=30, choices=status_choices, default='WaitAccept')
 
 
@@ -142,7 +145,7 @@ class HourlyRequest(models.Model):
     FConf = models.BooleanField(default=False)  # First Confirmation --> Moeen
     SConf = models.BooleanField(blank=True, null=True, default=None)  # Second Confirmation --> Representative
     Status = models.CharField(max_length=30, choices=status_choices, default='WaitAccept')
-    StartTime = models.DateTimeField(blank=True, null=True)
-    EndTime = models.DateTimeField(blank=True, null=True)
-    RegisterTime = models.DateTimeField(default=getDateTime)
+    StartTime = jmodels.jDateTimeField(blank=True, null=True)
+    EndTime = jmodels.jDateTimeField(blank=True, null=True)
+    RegisterTime = jmodels.jDateTimeField(default=getDateTime)
 
