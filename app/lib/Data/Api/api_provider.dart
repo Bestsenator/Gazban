@@ -6,7 +6,9 @@ String loginUrl = '${headUrl}login/';
 String getReportRequestUrl = '${headUrl}getReportRequest/';
 String getListCharacterUrl = '${headUrl}getListCharacter/';
 String deleteCharacterUrl = '${headUrl}deleteCharacter/';
-String editCharacterInforUrl = '${headUrl}editCharacterInfo/';
+String editCharacterInfoUrl = '${headUrl}editCharacterInfo/';
+String getLocationUrl = '${headUrl}getLocation/';
+String getAnnouncementUrl = '${headUrl}getAnnouncement/';
 
 var publicHeaderApi = Options(headers: {'ApiKey': apiKey});
 var privateHeaderApi = Options(
@@ -124,7 +126,7 @@ class ApiProvider {
     List<int>? listOfCity,
   }) async {
     final response = await Dio().post(
-      editCharacterInforUrl,
+      editCharacterInfoUrl,
       // TODO : change header type Api - private or poblic ( privateHeaderApi is for unique Apis related to each user )
       options: publicHeaderApi,
       data: {
@@ -147,6 +149,31 @@ class ApiProvider {
     return response;
   }
 
+  getLocationApi({
+    required String areaCode,
+  }) async {
+    final response = await Dio().post(
+      getLocationUrl,
+      // TODO : change header type Api - private or poblic ( privateHeaderApi is for unique Apis related to each user )
+      options: publicHeaderApi,
+      data: {
+        'AreaCode': areaCode,
+      },
+    ).timeout(timeLimit);
+    return response;
+  }
 
-  
+  getAnnouncementApi({
+    required String areaCode,
+  }) async {
+    final response = await Dio().post(
+      getAnnouncementUrl,
+      // TODO : change header type Api - private or poblic ( privateHeaderApi is for unique Apis related to each user )
+      options: publicHeaderApi,
+      data: {
+        'AreaCode': areaCode,
+      },
+    ).timeout(timeLimit);
+    return response;
+  }
 }

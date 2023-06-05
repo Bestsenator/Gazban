@@ -75,7 +75,6 @@ class _ReportScreenState extends State<ReportScreen> {
                       iconColor: Theme.of(context).iconTheme.color,
                       contentPadding: EdgeInsets.only(right: 5),
                     ),
-                  
                   ),
                 ),
                 IconButton(
