@@ -18,8 +18,9 @@ class AddPersonScreen extends StatefulWidget {
 
 class _AddPersonScreenState extends State<AddPersonScreen> {
   //
-  bool bossType = false;
-  int personType = 3; // 
+  bool headType = false;
+  int personType = 3;
+  String? region = 'بردسکن';
 
   List listVillageCode = [];
   List<Widget> listVillage = [];
@@ -44,7 +45,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Text('روستای ${listVillageCode[i]}'),
+                Text('روستا ${listVillageCode[i]}'),
                 SizedBox(width: 5),
                 GestureDetector(
                     onTap: () {
@@ -231,7 +232,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
   }
 
   wait() {
-    var durtion = Duration(microseconds: 100);
+    var durtion = Duration(microseconds: 10);
     return Timer(durtion, choicePersonType);
   }
 
@@ -317,6 +318,9 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                       if (value == 1) personType = 2;
                       if (value == 2) personType = 1;
                       if (value == 3) personType = 0;
+
+                      listCityCode.clear();
+                      createListCity();
                     });
                   },
                 ),
@@ -340,7 +344,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                           backgroundColor: Colors.transparent,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        selectedIndex: bossType ? 0 : 1,
+                        selectedIndex: headType ? 0 : 1,
                         thumb: Center(
                           child: Container(),
                         ),
@@ -369,7 +373,7 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                         onChanged: (value) {
                           print(value);
                           setState(() {
-                            bossType = value == 1 ? true : false;
+                            headType = value == 1 ? true : false;
                           });
                         },
                       ),
@@ -459,6 +463,14 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                   ),
                 ),
               ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text('ناحیه'),
+                  ),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Neumorphic(
@@ -470,13 +482,27 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                     boxShape:
                         NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
                   ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        label: Text('کد پرسنلی'),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-                    onChanged: (value) {},
+                  child: Row(
+                    children: [
+                      SizedBox(width: 15),
+                      IgnorePointer(
+                        ignoring: true,
+                        child: DropdownButton(
+                            hint: Text(
+                              region ?? '',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge!
+                                    .color,
+                              ),
+                            ),
+                            underline: Container(),
+                            icon: Container(),
+                            items: const [],
+                            onChanged: null),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -499,124 +525,205 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                     boxShape:
                         NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
                   ),
-                  child: Row(
-                    children: [
-                      DropdownButton(
-                          value: '0',
-                          items: [
-                            DropdownMenuItem(
-                                value: '0', child: Text('انتخاب نمایید')),
-                            DropdownMenuItem(value: '1', child: Text('data1')),
-                            DropdownMenuItem(value: '2', child: Text('data2')),
-                            DropdownMenuItem(value: '3', child: Text('data3')),
-                            DropdownMenuItem(value: '4', child: Text('data4')),
-                            DropdownMenuItem(value: '5', child: Text('data5')),
-                            DropdownMenuItem(value: '6', child: Text('data6')),
-                            DropdownMenuItem(value: '7', child: Text('data7')),
-                            DropdownMenuItem(value: '8', child: Text('data8')),
-                            DropdownMenuItem(value: '9', child: Text('data9')),
-                            DropdownMenuItem(
-                                value: '10', child: Text('data10')),
-                            DropdownMenuItem(
-                                value: '11', child: Text('data11')),
-                            DropdownMenuItem(
-                                value: '12', child: Text('data12')),
-                            DropdownMenuItem(
-                                value: '13', child: Text('data13')),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              if (listCityCode.indexOf(value) < 0) {
-                                listCityCode.add(value!);
-                              }
-
-                              createListCity();
-                            });
-                          }),
-                    ],
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width - 20,
+                    child: Wrap(
+                      children: <Widget>[
+                            DropdownButton(
+                              hint: Neumorphic(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                margin: EdgeInsets.fromLTRB(0, 2, 10, 2),
+                                style: NeumorphicStyle(
+                                  color: Colors.transparent,
+                                  shadowDarkColor: Colors.black,
+                                  depth: 2,
+                                  intensity: 0.7,
+                                  boxShape: NeumorphicBoxShape.roundRect(
+                                      BorderRadius.circular(12)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'انتخاب شهر',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .displayLarge!
+                                            .color,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Icon(
+                                      CupertinoIcons.add_circled,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              underline: Container(),
+                              icon: Container(),
+                              items: [
+                                DropdownMenuItem(
+                                    value: '1', child: Text('data1')),
+                                DropdownMenuItem(
+                                    value: '2', child: Text('data2')),
+                                DropdownMenuItem(
+                                    value: '3', child: Text('data3')),
+                                DropdownMenuItem(
+                                    value: '4', child: Text('data4')),
+                                DropdownMenuItem(
+                                    value: '5', child: Text('data5')),
+                                DropdownMenuItem(
+                                    value: '6', child: Text('data6')),
+                                DropdownMenuItem(
+                                    value: '7', child: Text('data7')),
+                                DropdownMenuItem(
+                                    value: '8', child: Text('data8')),
+                                DropdownMenuItem(
+                                    value: '9', child: Text('data9')),
+                                DropdownMenuItem(
+                                    value: '10', child: Text('data10')),
+                                DropdownMenuItem(
+                                    value: '11', child: Text('data11')),
+                                DropdownMenuItem(
+                                    value: '12', child: Text('data12')),
+                                DropdownMenuItem(
+                                    value: '13', child: Text('data13')),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  if (listCityCode.indexOf(value) < 0) {
+                                    if (personType == 3 || personType == 1) {
+                                      listCityCode.clear();
+                                      listCityCode.add(value!);
+                                    } else {
+                                      listCityCode.add(value!);
+                                    }
+                                  }
+                                  createListCity();
+                                });
+                              },
+                            ),
+                          ] +
+                          listCity,
+                    ),
                   ),
                 ),
               ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: <Widget>[
-                      listCity.isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('شهرهای انتخاب شده : '),
-                            )
-                          : Container()
-                    ] +
-                    listCity,
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text('روستا'),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Neumorphic(
-                  style: NeumorphicStyle(
-                    color: Colors.transparent,
-                    shadowDarkColor: Colors.black,
-                    depth: 4,
-                    intensity: 0.5,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  ),
-                  child: Row(
-                    children: [
-                      DropdownButton(
-                          value: '0',
-                          items: [
-                            DropdownMenuItem(
-                                value: '0', child: Text('انتخاب نمایید')),
-                            DropdownMenuItem(value: '1', child: Text('data1')),
-                            DropdownMenuItem(value: '2', child: Text('data2')),
-                            DropdownMenuItem(value: '3', child: Text('data3')),
-                            DropdownMenuItem(value: '4', child: Text('data4')),
-                            DropdownMenuItem(value: '5', child: Text('data5')),
-                            DropdownMenuItem(value: '6', child: Text('data6')),
-                            DropdownMenuItem(value: '7', child: Text('data7')),
-                            DropdownMenuItem(value: '8', child: Text('data8')),
-                            DropdownMenuItem(value: '9', child: Text('data9')),
-                            DropdownMenuItem(
-                                value: '10', child: Text('data10')),
-                            DropdownMenuItem(
-                                value: '11', child: Text('data11')),
-                            DropdownMenuItem(
-                                value: '12', child: Text('data12')),
-                            DropdownMenuItem(
-                                value: '13', child: Text('data13')),
+              personType == 3
+                  ? Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: Text('روستا'),
+                            ),
                           ],
-                          onChanged: (value) {
-                            setState(() {
-                              if (listVillageCode.indexOf(value) < 0) {
-                                listVillageCode.add(value!);
-                              }
-                              createListVillage();
-                            });
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: <Widget>[
-                      listVillage.isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('روستاهای انتخاب شده : '),
-                            )
-                          : Container()
-                    ] +
-                    listVillage,
-              )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Neumorphic(
+                            style: NeumorphicStyle(
+                              color: Colors.transparent,
+                              shadowDarkColor: Colors.black,
+                              depth: 4,
+                              intensity: 0.5,
+                              boxShape: NeumorphicBoxShape.roundRect(
+                                  BorderRadius.circular(12)),
+                            ),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width - 20,
+                              child: Wrap(
+                                children: <Widget>[
+                                      DropdownButton(
+                                        hint: Neumorphic(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 5),
+                                          margin:
+                                              EdgeInsets.fromLTRB(0, 2, 10, 2),
+                                          style: NeumorphicStyle(
+                                            color: Colors.transparent,
+                                            shadowDarkColor: Colors.black,
+                                            depth: 2,
+                                            intensity: 0.7,
+                                            boxShape:
+                                                NeumorphicBoxShape.roundRect(
+                                                    BorderRadius.circular(12)),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                'انتخاب روستا',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .displayLarge!
+                                                      .color,
+                                                ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Icon(
+                                                CupertinoIcons.add_circled,
+                                                size: 20,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        underline: Container(),
+                                        icon: Container(),
+                                        items: [
+                                          DropdownMenuItem(
+                                              value: '1', child: Text('data1')),
+                                          DropdownMenuItem(
+                                              value: '2', child: Text('data2')),
+                                          DropdownMenuItem(
+                                              value: '3', child: Text('data3')),
+                                          DropdownMenuItem(
+                                              value: '4', child: Text('data4')),
+                                          DropdownMenuItem(
+                                              value: '5', child: Text('data5')),
+                                          DropdownMenuItem(
+                                              value: '6', child: Text('data6')),
+                                          DropdownMenuItem(
+                                              value: '7', child: Text('data7')),
+                                          DropdownMenuItem(
+                                              value: '8', child: Text('data8')),
+                                          DropdownMenuItem(
+                                              value: '9', child: Text('data9')),
+                                          DropdownMenuItem(
+                                              value: '10',
+                                              child: Text('data10')),
+                                          DropdownMenuItem(
+                                              value: '11',
+                                              child: Text('data11')),
+                                          DropdownMenuItem(
+                                              value: '12',
+                                              child: Text('data12')),
+                                          DropdownMenuItem(
+                                              value: '13',
+                                              child: Text('data13')),
+                                        ],
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (listVillageCode.indexOf(value) <
+                                                0) {
+                                              listVillageCode.add(value!);
+                                            }
+                                            createListVillage();
+                                          });
+                                        },
+                                      ),
+                                    ] +
+                                    listVillage,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
         ),

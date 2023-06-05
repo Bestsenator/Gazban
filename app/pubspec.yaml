@@ -9,7 +9,7 @@ version: 0.1.1
 
 
 environment:
-  sdk: '>=2.19.4 <3.0.0'
+  sdk: '>=2.19.2 <3.0.0'
 
 
 
@@ -37,6 +37,7 @@ dependencies:
   custom_sliding_segmented_control: ^1.7.4
   persian_datetime_picker: ^2.5.0
   image_picker: ^0.8.7+5
+  flutter_slidable: ^3.0.0
 
 
   

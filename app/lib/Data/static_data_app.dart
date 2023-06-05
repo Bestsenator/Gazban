@@ -1,4 +1,4 @@
-// String appVersion = '0.1.1';
+String appVersion = '0.1.1';
 
 // String headUrl1 = 'http://37.32.4.252:12345/api/';
 // String headUrl2 = 'https://www.peykarman.ir/api/';

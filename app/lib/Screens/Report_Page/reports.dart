@@ -1,9 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+
+import '../../Data/Api/api_provider.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -13,7 +16,40 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
+  //
+  ApiProvider test = ApiProvider();
   bool reportType = false;
+
+  Future<int> getReport({
+    required String from,
+    required String to,
+    required String peCode,
+  }) async {
+    try {
+      Response response =
+          await test.getReportRequestApi(from: from, to: to, peCode: peCode);
+      print(response);
+      if (response.data['Status'] == 200) {
+        return 200;
+      } else if (response.data['Status'] == 400) {
+        print('اطلاعات ارسالی اشتباه است');
+        return 400;
+      } else if (response.data['Status'] == 900) {
+        print('کلید ای پی آی معتبر نیست');
+        return 900;
+      } else if (response.data['Status'] == 901) {
+        print('کلیدهای ای پی آی اشتباه تعریف شده است');
+        return 901;
+      } else {
+        print(
+            'وضعیت ناشناخته! کد وضعیت برنامه ریزی نشده است \n پاسخ درخواست : \n ${response.data}');
+        return 1000;
+      }
+    } catch (e) {
+      return 1000;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +69,13 @@ class _ReportScreenState extends State<ReportScreen> {
                   child: TextField(
                     magnifierConfiguration: TextMagnifierConfiguration(),
                     decoration: InputDecoration(
-                        hintText: 'جستجو ...',
-                        contentPadding: EdgeInsets.only(right: 10)),
+                      border: InputBorder.none,
+                      hintText: 'جستجو ...',
+                      icon: Icon(CupertinoIcons.search, size: 28),
+                      iconColor: Theme.of(context).iconTheme.color,
+                      contentPadding: EdgeInsets.only(right: 5),
+                    ),
+                  
                   ),
                 ),
                 IconButton(

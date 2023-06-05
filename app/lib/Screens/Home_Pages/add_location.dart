@@ -1,13 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:expandable/expandable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:image_picker/image_picker.dart';
+
 
 class AddLocationScreen extends StatefulWidget {
   const AddLocationScreen({super.key});
@@ -19,82 +12,8 @@ class AddLocationScreen extends StatefulWidget {
 class _AddLocationScreenState extends State<AddLocationScreen> {
   //
   bool locationType = false;
-
-  List listVillageCode = [];
-  List<Widget> listVillage = [];
-
-  List listCityCode = [];
-  List<Widget> listCity = [];
-
-  createListVillage() {
-    listVillage.clear();
-    for (int i = 0; i < listVillageCode.length; i++) {
-      listVillage.add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Neumorphic(
-            style: NeumorphicStyle(
-              color: Colors.transparent,
-              shadowDarkColor: Colors.black,
-              depth: 4,
-              intensity: 0.5,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Text('روستای ${listVillageCode[i]}'),
-                SizedBox(width: 5),
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        listVillageCode.removeAt(i);
-                        createListVillage();
-                      });
-                    },
-                    child: Icon(CupertinoIcons.clear_circled))
-              ]),
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  createListCity() {
-    listCity.clear();
-    for (int i = 0; i < listCityCode.length; i++) {
-      listCity.add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Neumorphic(
-            style: NeumorphicStyle(
-              color: Colors.transparent,
-              shadowDarkColor: Colors.black,
-              depth: 4,
-              intensity: 0.5,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Text('شهر ${listCityCode[i]}'),
-                SizedBox(width: 5),
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        listCityCode.removeAt(i);
-                        createListCity();
-                      });
-                    },
-                    child: Icon(CupertinoIcons.clear_circled))
-              ]),
-            ),
-          ),
-        ),
-      );
-    }
-  }
+  String? region = 'بردسکن';
+  String? city;
 
   popPage() {
     Navigator.of(context).pop(false);
@@ -116,7 +35,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                      'برای تعریف فرد جدید ابتدا دسته بندی آن را انتخاب نمایید'),
+                      'برای تعریف منطقه جدید ابتدا دسته‌بندی آن را انتخاب نمایید'),
                   SizedBox(height: 20),
                   Row(
                     children: [
@@ -211,7 +130,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'افزودن فرد',
+                    'افزودن منطقه',
                     style: TextStyle(fontSize: 20),
                   )
                 ],
@@ -221,7 +140,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text('نوع رئیس '),
+                    child: Text('دسته بندی'),
                   ),
                 ],
               ),
@@ -239,20 +158,20 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                   ),
                   children: [
                     ToggleElement(
-                      foreground: Center(child: Text('رئیس شهر')),
+                      foreground: Center(child: Text('روستا')),
                       background: Center(
                         child: Text(
-                          'رئیس شهر',
+                          'روستا',
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       ),
                     ),
                     ToggleElement(
-                      foreground: Center(child: Text('رئیس امداد')),
+                      foreground: Center(child: Text('شهر')),
                       background: Center(
                         child: Text(
-                          'رئیس امداد',
+                          'شهر',
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),
@@ -279,93 +198,9 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                         NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
                   ),
                   child: TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         border: InputBorder.none,
-                        label: Text('نام'),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-                    onChanged: (value) {},
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Neumorphic(
-                  style: NeumorphicStyle(
-                    color: Colors.transparent,
-                    shadowDarkColor: Colors.black,
-                    depth: 4,
-                    intensity: 0.5,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        label: Text('نام خانوادگی'),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-                    onChanged: (value) {},
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Neumorphic(
-                  style: NeumorphicStyle(
-                    color: Colors.transparent,
-                    shadowDarkColor: Colors.black,
-                    depth: 4,
-                    intensity: 0.5,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        label: Text('شماره همراه'),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-                    onChanged: (value) {},
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Neumorphic(
-                  style: NeumorphicStyle(
-                    color: Colors.transparent,
-                    shadowDarkColor: Colors.black,
-                    depth: 4,
-                    intensity: 0.5,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        label: Text('کد ملی'),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-                    onChanged: (value) {},
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Neumorphic(
-                  style: NeumorphicStyle(
-                    color: Colors.transparent,
-                    shadowDarkColor: Colors.black,
-                    depth: 4,
-                    intensity: 0.5,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        label: Text('کد پرسنلی'),
+                        label: Text('نام ${locationType ? 'شهر' : 'روستا'}'),
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
                     onChanged: (value) {},
@@ -376,7 +211,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text('شهر'),
+                    child: Text('ناحیه'),
                   ),
                 ],
               ),
@@ -393,122 +228,98 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                   ),
                   child: Row(
                     children: [
-                      DropdownButton(
-                          value: '0',
-                          items: [
-                            DropdownMenuItem(
-                                value: '0', child: Text('انتخاب نمایید')),
-                            DropdownMenuItem(value: '1', child: Text('data1')),
-                            DropdownMenuItem(value: '2', child: Text('data2')),
-                            DropdownMenuItem(value: '3', child: Text('data3')),
-                            DropdownMenuItem(value: '4', child: Text('data4')),
-                            DropdownMenuItem(value: '5', child: Text('data5')),
-                            DropdownMenuItem(value: '6', child: Text('data6')),
-                            DropdownMenuItem(value: '7', child: Text('data7')),
-                            DropdownMenuItem(value: '8', child: Text('data8')),
-                            DropdownMenuItem(value: '9', child: Text('data9')),
-                            DropdownMenuItem(
-                                value: '10', child: Text('data10')),
-                            DropdownMenuItem(
-                                value: '11', child: Text('data11')),
-                            DropdownMenuItem(
-                                value: '12', child: Text('data12')),
-                            DropdownMenuItem(
-                                value: '13', child: Text('data13')),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              if (listCityCode.indexOf(value) < 0) {
-                                listCityCode.add(value!);
-                              }
-
-                              createListCity();
-                            });
-                          }),
+                      SizedBox(width: 15),
+                      IgnorePointer(
+                        ignoring: true,
+                        child: DropdownButton(
+                            hint: Text(
+                              region ?? '',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge!
+                                    .color,
+                              ),
+                            ),
+                            underline: Container(),
+                            icon: Container(),
+                            items: const [],
+                            onChanged: null),
+                      ),
                     ],
                   ),
                 ),
               ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: <Widget>[
-                      listCity.isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('شهرهای انتخاب شده : '),
-                            )
-                          : Container()
-                    ] +
-                    listCity,
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text('روستا'),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Neumorphic(
-                  style: NeumorphicStyle(
-                    color: Colors.transparent,
-                    shadowDarkColor: Colors.black,
-                    depth: 4,
-                    intensity: 0.5,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  ),
-                  child: Row(
-                    children: [
-                      DropdownButton(
-                          value: '0',
-                          items: [
-                            DropdownMenuItem(
-                                value: '0', child: Text('انتخاب نمایید')),
-                            DropdownMenuItem(value: '1', child: Text('data1')),
-                            DropdownMenuItem(value: '2', child: Text('data2')),
-                            DropdownMenuItem(value: '3', child: Text('data3')),
-                            DropdownMenuItem(value: '4', child: Text('data4')),
-                            DropdownMenuItem(value: '5', child: Text('data5')),
-                            DropdownMenuItem(value: '6', child: Text('data6')),
-                            DropdownMenuItem(value: '7', child: Text('data7')),
-                            DropdownMenuItem(value: '8', child: Text('data8')),
-                            DropdownMenuItem(value: '9', child: Text('data9')),
-                            DropdownMenuItem(
-                                value: '10', child: Text('data10')),
-                            DropdownMenuItem(
-                                value: '11', child: Text('data11')),
-                            DropdownMenuItem(
-                                value: '12', child: Text('data12')),
-                            DropdownMenuItem(
-                                value: '13', child: Text('data13')),
+              !locationType
+                  ? Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: Text('شهر'),
+                            ),
                           ],
-                          onChanged: (value) {
-                            setState(() {
-                              if (listVillageCode.indexOf(value) < 0) {
-                                listVillageCode.add(value!);
-                              }
-                              createListVillage();
-                            });
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: <Widget>[
-                      listVillage.isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('روستاهای انتخاب شده : '),
-                            )
-                          : Container()
-                    ] +
-                    listVillage,
-              )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Neumorphic(
+                            style: NeumorphicStyle(
+                              color: Colors.transparent,
+                              shadowDarkColor: Colors.black,
+                              depth: 4,
+                              intensity: 0.5,
+                              boxShape: NeumorphicBoxShape.roundRect(
+                                  BorderRadius.circular(12)),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 15),
+                                DropdownButton(
+                                    hint: Text(
+                                      'انتخاب شهر',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .displayLarge!
+                                            .color,
+                                      ),
+                                    ),
+                                    underline: Container(),
+                                    icon: Container(),
+                                    value: city,
+                                    items: [
+                                      DropdownMenuItem(
+                                          value: '1', child: Text('شهر1')),
+                                      DropdownMenuItem(
+                                          value: '2', child: Text('شهر2')),
+                                      DropdownMenuItem(
+                                          value: '3', child: Text('شهر3')),
+                                      DropdownMenuItem(
+                                          value: '4', child: Text('شهر4')),
+                                      DropdownMenuItem(
+                                          value: '5', child: Text('شهر5')),
+                                      DropdownMenuItem(
+                                          value: '6', child: Text('شهر6')),
+                                      DropdownMenuItem(
+                                          value: '7', child: Text('شهر7')),
+                                      DropdownMenuItem(
+                                          value: '8', child: Text('شهر8')),
+                                      DropdownMenuItem(
+                                          value: '9', child: Text('شهر9')),
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        city = value!;
+                                      });
+                                    }),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
         ),

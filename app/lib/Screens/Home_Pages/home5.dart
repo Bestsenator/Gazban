@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                print('');
+                                Navigator.pushNamed(context, '/persons');
                               },
                               child: Neumorphic(
                                 style: NeumorphicStyle(
@@ -182,7 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(context, '/locations');
+                              },
                               child: Neumorphic(
                                 style: NeumorphicStyle(
                                   color: Colors.transparent,
@@ -208,7 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(context, '/add_location');
+                              },
                               child: Neumorphic(
                                 style: NeumorphicStyle(
                                   color: Colors.transparent,
