@@ -161,7 +161,7 @@ class SplashScreenState extends State<SplashScreen> {
 
       showTopSnackBar(
         Overlay.of(context),
-        const CustomSnackBar.error(
+        const CustomSnackBar.success(
           message:
               'درخواست ارسال نشد اتصال به شبکه را بررسی نمایید یا فیلترشکن خود را خاموش نمایید',
         ),

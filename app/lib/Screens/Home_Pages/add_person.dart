@@ -21,6 +21,10 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
   bool headType = false;
   int personType = 3;
   String? region = 'بردسکن';
+  TextEditingController controller = TextEditingController();
+
+  List<String> listPhoneNumber = [];
+  List<Widget> listPhone = [];
 
   List listVillageCode = [];
   List<Widget> listVillage = [];
@@ -95,6 +99,44 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
           ),
         ),
       );
+    }
+  }
+
+  createListPhone() {
+    listPhone.clear();
+    for (int i = 0; i < listPhoneNumber.length; i++) {
+      setState(() {
+        listPhone.add(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Neumorphic(
+              style: NeumorphicStyle(
+                color: Colors.transparent,
+                shadowDarkColor: Colors.black,
+                depth: 4,
+                intensity: 0.5,
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Text(listPhoneNumber[i]),
+                  SizedBox(width: 5),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          listPhoneNumber.removeAt(i);
+                          createListPhone();
+                        });
+                      },
+                      child: Icon(CupertinoIcons.clear_circled))
+                ]),
+              ),
+            ),
+          ),
+        );
+      });
     }
   }
 
@@ -432,13 +474,39 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                     boxShape:
                         NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
                   ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        label: Text('شماره همراه'),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
-                    onChanged: (value) {},
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: controller,
+                        maxLength: 11,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          label: Text('شماره همراه'),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              if (controller.text.length == 11) {
+                                listPhoneNumber.add(controller.text);
+                                createListPhone();
+                                controller.clear();
+                              }
+                            },
+                            icon: Icon(
+                              Icons.add_circle_outline_rounded,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ),
+                          counterText: '',
+                        ),
+                        onChanged: (value) {},
+                      ),
+                      Container(
+                        child: Wrap(
+                            alignment: WrapAlignment.end, children: listPhone),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -463,6 +531,28 @@ class _AddPersonScreenState extends State<AddPersonScreen> {
                   ),
                 ),
               ),
+              if (personType == 2)
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                      color: Colors.transparent,
+                      shadowDarkColor: Colors.black,
+                      depth: 4,
+                      intensity: 0.5,
+                      boxShape: NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(12)),
+                    ),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          label: Text('شماره پیمان'),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10)),
+                      onChanged: (value) {},
+                    ),
+                  ),
+                ),
               Row(
                 children: [
                   Padding(

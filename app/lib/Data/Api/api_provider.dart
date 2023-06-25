@@ -9,6 +9,7 @@ String deleteCharacterUrl = '${headUrl}deleteCharacter/';
 String editCharacterInfoUrl = '${headUrl}editCharacterInfo/';
 String getLocationUrl = '${headUrl}getLocation/';
 String getAnnouncementUrl = '${headUrl}getAnnouncement/';
+String addAnnouncementUrl = '${headUrl}addAnnouncement/';
 
 var publicHeaderApi = Options(headers: {'ApiKey': apiKey});
 var privateHeaderApi = Options(
@@ -172,6 +173,28 @@ class ApiProvider {
       options: publicHeaderApi,
       data: {
         'AreaCode': areaCode,
+      },
+    ).timeout(timeLimit);
+    return response;
+  }
+
+  addAnnouncement({
+    required String peCode,
+    required String title,
+    required String content,
+    required bool priority,
+    MultipartFile? image,
+  }) async {
+    final response = await Dio().post(
+      addAnnouncementUrl,
+      // TODO : change header type Api - private or poblic ( privateHeaderApi is for unique Apis related to each user )
+      options: publicHeaderApi,
+      data: {
+        'PeCode': peCode,
+        'Title': title,
+        'Content': content,
+        'Priority': priority,
+        'Image': image,
       },
     ).timeout(timeLimit);
     return response;

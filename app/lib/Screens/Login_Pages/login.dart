@@ -33,26 +33,17 @@ class LoginScreenState extends State<LoginScreen> {
     return prefs.setString('Session', session);
   }
 
-  Future<int> checkInfoDelivery({
+  Future<int> login({
     required String username,
     required String password,
   }) async {
     try {
       Response response =
           await test.loginApi(username: username, password: password);
-      Response response1 = await test.editCharacterInfoApi(
-        peCode: '123',
-        character: 'Ardi',
-        peCodeCharacter: '123',
-        name: 'ali',
-        family: 'najaf',
-        nationalCode: '6510097801',
-        listOfPhone: ['09154807916', '09154807916', '09154807916'],
-        listOfVillages: [],
-      );
+
       //   String data = response.toString();
       print(response);
-      print(response1);
+
       EasyLoading.dismiss();
 
       // سشن ذخیره می‌شود
@@ -61,6 +52,8 @@ class LoginScreenState extends State<LoginScreen> {
       }
 
       if (response.data['Status'] == 200) {
+
+        
         return 200;
       }
       if (response.data['Status'] == 201) {
@@ -112,7 +105,7 @@ class LoginScreenState extends State<LoginScreen> {
         ));
         print('نام کاربری یا رمز عبور اشتباه است');
         return 400;
-      }  else if (response.data['Status'] == 900) {
+      } else if (response.data['Status'] == 900) {
         print('کلید ای پی آی معتبر نیست');
         return 900;
       } else if (response.data['Status'] == 901) {
@@ -141,7 +134,7 @@ class LoginScreenState extends State<LoginScreen> {
   chekState() async {
     EasyLoading.show(status: 'در حال بارگذاری . . .');
     int status =
-        await checkInfoDelivery(username: username!, password: password!);
+        await login(username: username!, password: password!);
     if (status == 200) {}
   }
 
@@ -304,7 +297,7 @@ class LoginScreenState extends State<LoginScreen> {
                               text: convertToFa(newValue.text));
                         }),
                       ],
-                      maxLength: 10,
+                      maxLength: 11,
                       style: const TextStyle(fontSize: 18, letterSpacing: 1.5),
                       textDirection: TextDirection.ltr,
                       keyboardType: TextInputType.phone,
@@ -341,7 +334,7 @@ class LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 80),
                     child: NeumorphicButton(
                       style: NeumorphicStyle(
-                        color: password!.length == 10 && username != null
+                        color: password!.length == 11 && username != null
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).primaryColor.withOpacity(0.2),
                         shadowDarkColor: Colors.black,
@@ -350,7 +343,7 @@ class LoginScreenState extends State<LoginScreen> {
                         boxShape: NeumorphicBoxShape.roundRect(
                             BorderRadius.circular(40)),
                       ),
-                      onPressed: password!.length == 10 && username != null
+                      onPressed: password!.length == 11 && username != null
                           ? () {
                               chekState();
                             }
