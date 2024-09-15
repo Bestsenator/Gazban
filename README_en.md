@@ -1,6 +1,6 @@
-# Gasban
+# Gazban
 
-**Gasban** is a comprehensive project that includes both backend and mobile application components, developed using Django and Flutter. This project is designed for managing individuals who work as gas meter readers. The system provides capabilities for managing areas, registering and tracking leave requests, and sending and managing notifications. Additionally, detailed information about each gas meter reader and their areas of operation is carefully managed.
+**Gazban** is a comprehensive project that includes both backend and mobile application components, developed using Django and Flutter. This project is designed for managing individuals who work as gas meter readers. The system provides capabilities for managing areas, registering and tracking leave requests, and sending and managing notifications. Additionally, detailed information about each gas meter reader and their areas of operation is carefully managed.
 
 ## Project Structure
 
