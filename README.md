@@ -2,7 +2,7 @@
 
 این پروژه شامل یک سیستم بک‌اند و اپلیکیشن موبایل است که برای مدیریت افرادی که به عنوان قرائت‌کننده شماره کنتورهای گاز فعالیت می‌کنند، طراحی شده است. وظایفی مانند مدیریت مناطق فعالیت، ثبت و گردش مرخصی‌ها و همچنین ارسال و گردش اطلاعیه‌ها در این سیستم انجام می‌شود. اپلیکیشن موبایل که با استفاده از Flutter توسعه داده شده، برای استفاده آسان‌تر توسط قرائت‌کنندگان طراحی شده است. بخش بک‌اند نیز با استفاده از Django پیاده‌سازی شده است.
 
-Welcome to the Gasban Project repository! This project includes both a backend system and a mobile application designed to manage gas meter readers. Tasks such as managing work areas, tracking and processing leave requests, as well as sending and handling notifications are managed within the system. The mobile app, developed using Flutter, is tailored for convenient use by meter readers, while the backend is built using Django.
+Welcome to the Gazban Project repository! This project includes both a backend system and a mobile application designed to manage gas meter readers. Tasks such as managing work areas, tracking and processing leave requests, as well as sending and handling notifications are managed within the system. The mobile app, developed using Flutter, is tailored for convenient use by meter readers, while the backend is built using Django.
 
 برای مشاهده راهنمای پروژه به زبان دلخواه، بر روی لینک‌های زیر کلیک کنید:
 
